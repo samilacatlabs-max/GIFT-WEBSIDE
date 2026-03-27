@@ -41,7 +41,7 @@ function filterProducts(category) {
         if (category === 'all' || product.dataset.category === category) {
             product.parentElement.style.display = 'block'; // Make sure parent is visible if needed, but grid handles it
             product.style.display = 'block';
-            
+
             // Add a small fade-in animation
             product.animate([
                 { opacity: 0, transform: 'scale(0.95)' },
@@ -84,7 +84,7 @@ let cart = JSON.parse(localStorage.getItem('zligger_cart')) || [];
 function toggleCart() {
     const modal = document.getElementById('cart-modal');
     const drawer = document.getElementById('cart-drawer');
-    
+
     if (modal.classList.contains('hidden')) {
         modal.classList.remove('hidden');
         // Small delay to allow display:block to apply before animating transform
@@ -107,10 +107,10 @@ function addToCart(id, name, price, image) {
     } else {
         cart.push({ id, name, price, image, quantity: 1 });
     }
-    
+
     saveCart();
     updateCartDisplay();
-    
+
     // Display short alert
     alert(`${name} has been added to your cart.`);
 }
@@ -144,33 +144,33 @@ function updateCartDisplay() {
     const mobileCountBadge = document.getElementById('mobile-cart-count');
     const totalEl = document.getElementById('cart-total');
     const emptyMsg = document.getElementById('empty-cart-msg');
-    
+
     // Update Counts
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    
+
     if (totalItems > 0) {
-        if(countBadge) { countBadge.textContent = totalItems; countBadge.classList.remove('hidden'); }
-        if(mobileCountBadge) { mobileCountBadge.textContent = totalItems; mobileCountBadge.classList.remove('hidden'); }
+        if (countBadge) { countBadge.textContent = totalItems; countBadge.classList.remove('hidden'); }
+        if (mobileCountBadge) { mobileCountBadge.textContent = totalItems; mobileCountBadge.classList.remove('hidden'); }
     } else {
-        if(countBadge) countBadge.classList.add('hidden');
-        if(mobileCountBadge) mobileCountBadge.classList.add('hidden');
+        if (countBadge) countBadge.classList.add('hidden');
+        if (mobileCountBadge) mobileCountBadge.classList.add('hidden');
     }
-    
+
     let totalValue = 0;
-    
+
     if (cart.length === 0) {
-        if(container) {
+        if (container) {
             Array.from(container.children).forEach(child => {
-                if(child.id !== 'empty-cart-msg') child.remove();
+                if (child.id !== 'empty-cart-msg') child.remove();
             });
         }
-        if(emptyMsg) emptyMsg.style.display = 'block';
-        if(totalEl) totalEl.textContent = '0';
+        if (emptyMsg) emptyMsg.style.display = 'block';
+        if (totalEl) totalEl.textContent = '0';
         return;
     }
-    
-    if(emptyMsg) emptyMsg.style.display = 'none';
-    
+
+    if (emptyMsg) emptyMsg.style.display = 'none';
+
     // Build cart items HTML
     let itemsHTML = '';
     cart.forEach(item => {
@@ -193,14 +193,14 @@ function updateCartDisplay() {
             </div>
         `;
     });
-    
-    if(container) {
+
+    if (container) {
         Array.from(container.children).forEach(child => {
-            if(child.id !== 'empty-cart-msg') child.remove();
+            if (child.id !== 'empty-cart-msg') child.remove();
         });
         container.insertAdjacentHTML('beforeend', itemsHTML);
     }
-    if(totalEl) totalEl.textContent = totalValue.toLocaleString();
+    if (totalEl) totalEl.textContent = totalValue.toLocaleString();
 }
 
 function checkoutWhatsApp() {
@@ -208,19 +208,19 @@ function checkoutWhatsApp() {
         alert("Your cart is empty!");
         return;
     }
-    
+
     const phoneNumber = "94714338752"; // Zligger WhatsApp Number
-    
+
     let message = "*New Order from Website*%0A%0A";
     let total = 0;
-    
+
     cart.forEach(item => {
         message += `• ${item.name} (x${item.quantity}) - LKR ${item.price * item.quantity}%0A`;
         total += item.price * item.quantity;
     });
-    
+
     message += `%0A*Total: LKR ${total.toLocaleString()}*%0A%0APlease process my order.`;
-    
+
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(whatsappUrl, '_blank');
 }
